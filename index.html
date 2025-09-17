@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Deseja terminar comigo?</title>
+<style>
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#071028 0%, #0f172a 100%);
+    font-family: Inter, Arial, sans-serif;
+    color:#fff;
+    overflow:hidden;
+  }
+  .wrap{
+    position:relative;
+    width:100%;
+    max-width:500px;
+    height:70vh;
+    padding:20px;
+    text-align:center;
+  }
+  h1{ margin-bottom:20px; }
+  .btn-fugir{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    padding:14px 24px;
+    background:#ef4444;
+    border:none;
+    border-radius:12px;
+    color:white;
+    font-weight:700;
+    font-size:1.1rem;
+    cursor:pointer;
+    transition:left .1s, top .1s;
+  }
+  .btn-nao{
+    position:absolute;
+    right:20px;
+    bottom:20px;
+    padding:12px 16px;
+    background:#10b981;
+    border:none;
+    border-radius:10px;
+    color:white;
+    font-weight:700;
+    font-size:1rem;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap" id="wrap">
+    <h1>Deseja terminar comigo?</h1>
+    <button id="btnSim" class="btn-fugir">Sim</button>
+    <button id="btnNao" class="btn-nao">Não</button>
+  </div>
+
+  <script>
+    const btnSim = document.getElementById('btnSim');
+    const btnNao = document.getElementById('btnNao');
+    const wrap = document.getElementById('wrap');
+
+    function moveButton(){
+      const wrapRect = wrap.getBoundingClientRect();
+      const btnRect  = btnSim.getBoundingClientRect();
+
+      const margin = 10;
+      const maxLeft = wrapRect.width - btnRect.width - margin;
+      const maxTop  = wrapRect.height - btnRect.height - margin;
+
+      const newLeft = Math.min(Math.max(margin, Math.random() * maxLeft), maxLeft);
+      const newTop  = Math.min(Math.max(margin, Math.random() * maxTop), maxTop);
+
+      btnSim.style.left = newLeft + 'px';
+      btnSim.style.top  = newTop + 'px';
+      btnSim.style.transform = "translate(0,0)";
+    }
+
+    // Botão pula sozinho a cada 300ms
+    setInterval(moveButton, 300);
+
+    // Desktop: passa o mouse
+    btnSim.addEventListener('mouseover', moveButton);
+
+    // Mobile: detecta toque próximo do botão
+    document.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      const btnRect = btnSim.getBoundingClientRect();
+      const distance = Math.hypot(
+        touch.clientX - (btnRect.left + btnRect.width / 2),
+        touch.clientY - (btnRect.top + btnRect.height / 2)
+      );
+      if(distance < 100){
+        moveButton();
+      }
+    }, {passive:false});
+
+    // Botão "Não"
+    btnNao.addEventListener('click', () => {
+      alert("Boa escolha, EU TE AMO!");
+    });
+  </script>
+</body>
+</html>
